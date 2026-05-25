@@ -70,8 +70,12 @@ public final class Settings {
         if (plugin == null) {
             return false;
         }
-        if (!new File(plugin.getDataFolder(), "config.yml").isFile()) {
-            plugin.getLogger().severe("Missing required Git-managed config.yml");
+        File file = new File(plugin.getDataFolder(), "config.yml");
+        if (!file.isFile()) {
+            plugin.saveDefaultConfig();
+        }
+        if (!file.isFile()) {
+            plugin.getLogger().severe("Could not create required config.yml from the bundled default");
             return false;
         }
         plugin.reloadConfig();

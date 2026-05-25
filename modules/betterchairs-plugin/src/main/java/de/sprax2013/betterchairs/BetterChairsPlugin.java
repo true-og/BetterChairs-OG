@@ -49,7 +49,7 @@ public class BetterChairsPlugin extends JavaPlugin {
 
         // Init configuration files
         if (!Settings.reload() || !Messages.reload()) {
-            getLogger().severe("BetterChairs requires valid Git-managed config.yml and messages.yml files.");
+            getLogger().severe("BetterChairs requires valid config.yml and messages.yml files.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }

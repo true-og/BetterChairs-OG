@@ -47,7 +47,10 @@ public final class Messages {
         }
         File file = new File(plugin.getDataFolder(), "messages.yml");
         if (!file.isFile()) {
-            plugin.getLogger().severe("Missing required Git-managed messages.yml");
+            plugin.saveResource("messages.yml", false);
+        }
+        if (!file.isFile()) {
+            plugin.getLogger().severe("Could not create required messages.yml from the bundled default");
             return false;
         }
         yaml = YamlConfiguration.loadConfiguration(file);
