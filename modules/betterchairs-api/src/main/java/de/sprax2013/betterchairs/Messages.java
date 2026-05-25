@@ -22,6 +22,7 @@ public final class Messages {
 
     public static final String USE_ALREADY_OCCUPIED = "ChairUse.AlreadyOccupied";
     public static final String USE_NEEDS_SIGNS = "ChairUse.NeedsSignsOnBothSides";
+    public static final String USE_NEEDS_EMPTY_HAND = "ChairUse.NeedsEmptyHand";
     public static final String USE_NOW_SITTING = "ChairUse.NowSitting";
 
     private static YamlConfiguration yaml;
@@ -45,11 +46,21 @@ public final class Messages {
             return false;
         }
         File file = new File(plugin.getDataFolder(), "messages.yml");
-        if (!file.exists()) {
-            plugin.saveResource("messages.yml", false);
+        if (!file.isFile()) {
+            plugin.getLogger().severe("Missing required Git-managed messages.yml");
+            return false;
         }
         yaml = YamlConfiguration.loadConfiguration(file);
-        return true;
+        return yaml.isString(PREFIX)
+                && yaml.isString(NO_PERMISSION)
+                && yaml.isString(TOGGLE_ENABLED)
+                && yaml.isString(TOGGLE_DISABLED)
+                && yaml.isString(TOGGLE_STATUS_ENABLED)
+                && yaml.isString(TOGGLE_STATUS_DISABLED)
+                && yaml.isString(USE_ALREADY_OCCUPIED)
+                && yaml.isString(USE_NEEDS_SIGNS)
+                && yaml.isString(USE_NEEDS_EMPTY_HAND)
+                && yaml.isString(USE_NOW_SITTING);
     }
 
     public static void reset() {

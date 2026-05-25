@@ -19,8 +19,7 @@ Chairs:
   # Should a player automatically look forward when starting to sit
   AutoRotatePlayer: true
 
-  # Does a player need his hands empty when trying to sit?
-  NeedEmptyHands: true
+  # Right-clicking a chair always requires an empty main hand.
 
   # Does a chair need signs on both sides attached to be detected as an chair
   NeedsSignsOnBothSides: false

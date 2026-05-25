@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -84,8 +85,8 @@ public class EventListener implements Listener {
                         this.filteredMaterials.add(mat);
                     } else {
                         ChairManager.getLogger()
-                                .warning(() -> "Invalid block type '" + name + "' in "
-                                        + Settings.MATERIAL_FILTER_NAMES);
+                                .warning(
+                                        () -> "Invalid block type '" + name + "' in " + Settings.MATERIAL_FILTER_NAMES);
                     }
                 }
             }
@@ -119,9 +120,6 @@ public class EventListener implements Listener {
         if (e.getPlayer().getVehicle() != null && !Settings.bool(Settings.ALLOW_SWITCHING_SEATS))
             return; // Already sitting on something else
         if (!e.getPlayer().hasPermission(BetterChairsPlugin.LEGACY_NAMESPACE + ".use")) return;
-        if (Settings.bool(Settings.NEEDS_EMPTY_HANDS)
-                && !getManager().chairNMS.hasEmptyMainHand(e.getPlayer())) return;
-
         // Is world disabled?
         if (Settings.bool(Settings.WORLD_FILTER_ENABLED)) {
             boolean worldInFilter = Objects.requireNonNull(Settings.stringList(Settings.WORLD_FILTER_NAMES))
@@ -137,18 +135,17 @@ public class EventListener implements Listener {
                 && !getManager().chairNMS.isStair(e.getClickedBlock())
                 && !getManager().chairNMS.isSlab(e.getClickedBlock())) return; // Not a Stair or Slab
 
-        if (!e.getClickedBlock().getRelative(BlockFace.UP).isEmpty()
-                && Settings.bool(Settings.CHAIR_NEED_AIR_ABOVE)) return; // Needs air above chair
+        if (!e.getClickedBlock().getRelative(BlockFace.UP).isEmpty() && Settings.bool(Settings.CHAIR_NEED_AIR_ABOVE))
+            return; // Needs air above chair
 
-        if (e.getClickedBlock().getRelative(BlockFace.DOWN).isEmpty()
-                && !Settings.bool(Settings.CHAIR_ALLOW_AIR_BELOW)) return; // Does not allow air below chair
+        if (e.getClickedBlock().getRelative(BlockFace.DOWN).isEmpty() && !Settings.bool(Settings.CHAIR_ALLOW_AIR_BELOW))
+            return; // Does not allow air below chair
 
         // Block type disabled in config?
         if (!Settings.bool(Settings.MATERIAL_FILTER_ENABLED)
                 || (Settings.bool(Settings.MATERIAL_FILTER_ENABLED)
                         && !Settings.bool(Settings.MATERIAL_FILTER_ALLOW_ALL_TYPES))) {
-            if ((!Settings.bool(Settings.USE_STAIRS)
-                            && getManager().chairNMS.isStair(e.getClickedBlock()))
+            if ((!Settings.bool(Settings.USE_STAIRS) && getManager().chairNMS.isStair(e.getClickedBlock()))
                     || (!Settings.bool(Settings.USE_SLABS)
                             && getManager().chairNMS.isSlab(e.getClickedBlock()))) return;
 
@@ -162,6 +159,13 @@ public class EventListener implements Listener {
 
             // Block type on Blacklist or not on Whitelist
             if (blockInFilter == Settings.bool(Settings.MATERIAL_FILTER_AS_BLACKLIST)) return;
+        }
+
+        if (!getManager().chairNMS.hasEmptyMainHand(e.getPlayer())) {
+            if (isHoldingWeapon(e.getPlayer())) {
+                e.getPlayer().sendMessage(Messages.getString(Messages.USE_NEEDS_EMPTY_HAND));
+            }
+            return;
         }
 
         // Check Chair
@@ -254,6 +258,16 @@ public class EventListener implements Listener {
         } else {
             createChairTask.run();
         }
+    }
+
+    private static boolean isHoldingWeapon(Player player) {
+        String materialName = player.getItemInHand().getType().name();
+        return materialName.endsWith("_SWORD")
+                || materialName.endsWith("_AXE")
+                || materialName.equals("BOW")
+                || materialName.equals("CROSSBOW")
+                || materialName.equals("TRIDENT")
+                || materialName.equals("MACE");
     }
 
     /**

@@ -31,6 +31,10 @@ java {
     withJavadocJar()
 }
 
+tasks.jar { enabled = false }
+tasks.named("sourcesJar") { enabled = false }
+tasks.named("javadocJar") { enabled = false }
+
 allprojects {
     if (selfMavenLocalRepo != null) {
         repositories {

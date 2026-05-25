@@ -1,5 +1,6 @@
 package de.sprax2013.betterchairs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,13 +12,11 @@ public final class Settings {
     public static final String SIT_ON_ARROWS = "Chairs.SitOnArrows";
     public static final String ALLOWED_DISTANCE_TO_CHAIR = "Chairs.AllowedDistanceToChair";
     public static final String AUTO_ROTATE_PLAYER = "Chairs.AutoRotatePlayer";
-    public static final String NEEDS_EMPTY_HANDS = "Chairs.NeedEmptyHands";
     public static final String NEEDS_SIGNS = "Chairs.NeedsSignsOnBothSides";
     public static final String IGNORES_INTERACT_PREVENTION = "Chairs.IgnoreOtherPluginsPreventingInteract";
     public static final String HAVE_CHAIRS_DISABLED_FOR_PLAYER_BY_DEFAULT =
             "Chairs.HaveChairsDisabledForPlayerByDefault";
-    public static final String REMEMBER_IF_PLAYER_DISABLED_CHAIRS =
-            "Chairs.RememberIfPlayerDisabledChairsAfterRelogin";
+    public static final String REMEMBER_IF_PLAYER_DISABLED_CHAIRS = "Chairs.RememberIfPlayerDisabledChairsAfterRelogin";
     public static final String CHAIR_NEED_AIR_ABOVE = "Chairs.Position.NeedAirAbove";
     public static final String CHAIR_ALLOW_AIR_BELOW = "Chairs.Position.AllowAirBelow";
     public static final String USE_STAIRS = "Chairs.UseStairs";
@@ -71,7 +70,10 @@ public final class Settings {
         if (plugin == null) {
             return false;
         }
-        plugin.saveDefaultConfig();
+        if (!new File(plugin.getDataFolder(), "config.yml").isFile()) {
+            plugin.getLogger().severe("Missing required Git-managed config.yml");
+            return false;
+        }
         plugin.reloadConfig();
         for (Runnable r : listeners.toArray(new Runnable[0])) {
             r.run();

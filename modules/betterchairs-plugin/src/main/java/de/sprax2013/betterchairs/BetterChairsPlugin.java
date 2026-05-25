@@ -48,8 +48,11 @@ public class BetterChairsPlugin extends JavaPlugin {
         chairManager = new ChairManager(this, chairNMS);
 
         // Init configuration files
-        Settings.reload();
-        Messages.reload();
+        if (!Settings.reload() || !Messages.reload()) {
+            getLogger().severe("BetterChairs requires valid Git-managed config.yml and messages.yml files.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
 
         // Register Bukkit Event Listener
         Bukkit.getPluginManager().registerEvents(new EventListener(), this);
