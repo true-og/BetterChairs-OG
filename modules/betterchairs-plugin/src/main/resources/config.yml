@@ -9,7 +9,7 @@ Chairs:
   # Enabling this makes BetterChairs use Arrows instead of ArmorStands.
   # ArmorStands are made invisible so the player doesn't see anything of the magic happening when sitting.
   # But Spigot can be very unreliable on some versions (e.g. players instantly stopping to sit)
-  # 
+  #
   # If you are experiencing issues with ArmorStands, enable this option.
   SitOnArrows: false
 
@@ -59,7 +59,7 @@ Chairs:
   # This controls whether players can switch seats while already sitting.
   # If 'Chairs.LeavingChair.TeleportPlayerToOldLocation' is set,
   # the player will be teleported to the *first* location they sat at.
-  AllowSwitchingSeats: false
+  AllowSwitchingSeats: true
   Messages:
 
     # Should the player receive a message when the chair is already occupied
@@ -101,7 +101,7 @@ Filter:
 
     # Setting this to true, won't check if a chair
     # is a stair or slab but only look if it is in the list below
-    # 
+    #
     # This is kinda experimental.
     # Enabling overwrites 'UseStairs' and 'UseSlabs' further above
     AllowAllTypes: false
@@ -110,7 +110,7 @@ Filter:
     UseAsBlacklist: false
 
     # List of all enabled/disabled block types
-    # 
+    #
     # The names from Minecraft do not always work
     # Full list: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
     Names:
