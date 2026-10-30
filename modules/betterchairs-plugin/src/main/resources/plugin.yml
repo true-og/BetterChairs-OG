@@ -11,7 +11,7 @@ softdepend:
 
 author: SpraxDev
 authors: [ BlackScarx ]
-website: https://github.com/true-og/BetterChairs
+website: https://git.trueog.net/trueog/BetterChairs-OG
 
 commands:
   ${commandName}:
